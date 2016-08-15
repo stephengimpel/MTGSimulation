@@ -3,29 +3,49 @@ from __future__ import print_function
 from lxml import html
 import requests
 import urllib
-def main():
-	page = requests.get('http://econpy.pythonanywhere.com/ex/001.html');
-	tree = html.fromstring(page.content);
-	#This will create a list of buyers:
-	buyers = tree.xpath('//div[@title="buyer-name"]/text()');
-	#This will create a list of prices
-	prices = tree.xpath('//span[@class="item-price"]/text()');
-	print("Buyers: ", buyers);
-	print("Prices: ", prices);
+import random
+from math import floor
+def getRarity(rare, cards):
+	cardlist = {}
+	count = 0
+	for ci in cards:
+		#print(cards[ci]["rarity"])
+		if(cards[ci]["rarity"] == rare):
+			cardlist[count] = cards[ci]
+			#print(cardlist[count])
+			count += 1
+	
+	return cardlist
+
+def makePack(commons, uncommons, rares, mythics):
+	pack = {}
+	random.seed()
+	count = 0
+	while(count < 10):
+		pack[count] = commons[floor(random.random() * len(commons))]
+		count += 1
+	while(count < 13):
+		pack[count] = uncommons[floor(random.random() * len(uncommons))]
+		count += 1
+	if(random.random() < 0.125):
+		pack[count] = mythics[floor(random.random() * len(mythics))]
+	else:
+		pack[count] = rares[floor(random.random() * len(rares))]
+	return pack
+
+def getPackValue(pack):
+	num = 0
+	for i in pack:
+		num += pack[i]["value"]
+	return num
 
 def getset(name):
-	#page = requests.get('https://www.mtggoldfish.com/index/'+name +'#paper');
-	page = open("scrape.html").read()
-	tree = html.fromstring(page);
-	#/html/body/div[2]/div[7]/div[2]/table/tbody
+	page = requests.get('https://www.mtggoldfish.com/index/'+name +'#paper');
+	#page = open("scrape.html").read()
+	tree = html.fromstring(page.content);
 	cards = tree.xpath('//div[@class="index-price-table-paper"]/table/tbody/tr')
-	#tree.cssselect('.index-price-table-online [aria-live=polite]')
-	#map = func applied to each index in an iterable
-	#fliter = each element is given an arugmenet to the function filter, and the function
-	#returns t or f. T = included in return F = no way jose. Removes empty strings
-	#cards = map(str.strip,cards)
 	cardlist = {}
-	#print(cards)
+	count = 0
 	for i,ci in enumerate(cards):
 		data = list(ci)
 		di = data[0].iter()
@@ -38,19 +58,27 @@ def getset(name):
 			"rarity":rarity,
 			"value":value
 		}
-		cardlist[name] = cd
-	#print("{} is {} and valued at ${:.2}".format(name,rarity,value))
-	#names = tree.xpath('//td[@class="card"]/a/text()');
-	#price = tree.xpath('//tr/td[@class="text-right"][1]/text()');
-	#price = filter(len,map(str.strip,price))
-	#rarity = tree.xpath('//tr/td[3]/text()')
-	#rarity = filter(len, map(str.strip,rarity))
-	#test = map(float,[t[:-1] for t in test])
-	#for p in prices:
-	#	print(html.tostring(p))
-	#print(names);
-	#print(rarity)
-	#print(name);
-	print(cardlist)
+		cardlist[count] = cd
+		count +=1
+	return cardlist
 #main();
-getset("SOI")
+#start of program
+clist = getset("EMN")
+commons = getRarity("Common", clist)
+uncommons = getRarity("Uncommon", clist)
+rares = getRarity("Rare", clist)
+mythics = getRarity("Mythic", clist)
+value = 0
+scount = 0
+pcount = 0
+rare_values = 0
+while(scount < 10000):
+	while(pcount < 36):
+		pack = makePack(commons, uncommons, rares, mythics)
+		rare_values += pack[13]["value"]
+		value += getPackValue(pack)
+		pcount += 1
+	scount+=1
+	pcount=0
+print(value/10000)
+print(rare_values/10000)
