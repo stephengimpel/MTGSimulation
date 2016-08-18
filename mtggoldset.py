@@ -63,7 +63,11 @@ def getset(name):
 	return cardlist
 #main();
 #start of program
-clist = getset("EMN")
+setName = raw_input("Please input the acronym for the set (I.E Khans of Tarkir is KTK): ")
+clist = getset(setName)
+if(clist == {}):
+	print("An error occured when getting the set, please check your acronym or try again later.")
+	exit()
 commons = getRarity("Common", clist)
 uncommons = getRarity("Uncommon", clist)
 rares = getRarity("Rare", clist)
@@ -72,13 +76,15 @@ value = 0
 scount = 0
 pcount = 0
 rare_values = 0
+pack_count = eval(raw_input("How many packs are in this box: "))
 while(scount < 10000):
-	while(pcount < 36):
+	while(pcount < pack_count):
 		pack = makePack(commons, uncommons, rares, mythics)
 		rare_values += pack[13]["value"]
 		value += getPackValue(pack)
 		pcount += 1
 	scount+=1
 	pcount=0
-print(value/10000)
-print(rare_values/10000)
+print("Set Name:{}".format(setName))
+print("Total Average Box Value: {}".format(value/10000))
+print("Total Average Value of Rares in a Box: {}".format(rare_values/10000))
