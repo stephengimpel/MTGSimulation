@@ -71,6 +71,7 @@ def average(cardlist):
 	return value/len(cardlist)
 #main();
 #start of program
+#transfering
 setName = raw_input("Please input the acronym for the set (I.E Khans of Tarkir is KTK): ")
 clist = getset(setName)
 if(clist == {}):
