@@ -136,7 +136,6 @@ async_result1 = pool.apply_async(boxCreation, (number_of_boxes/4, pack_count, 1,
 async_result2 = pool.apply_async(boxCreation, (number_of_boxes/4, pack_count, 2, number_of_boxes/4))
 async_result3 = pool.apply_async(boxCreation, (number_of_boxes/4, pack_count, 3, number_of_boxes/2))
 async_result4 = pool.apply_async(boxCreation, (number_of_boxes/4, pack_count, 4, (3*number_of_boxes)/4))
-#value, rare_values = boxCreation(number_of_boxes/2, pack_count, 1)
 tvalue1, trare1 = async_result1.get()
 tvalue2, trare2 = async_result2.get()
 tvalue3, trare3 = async_result3.get()
