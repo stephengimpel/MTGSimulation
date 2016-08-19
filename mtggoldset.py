@@ -40,7 +40,7 @@ def getPackValue(pack):
 	return num
 
 def getset(name):
-	page = requests.get('https://www.mtggoldfish.com/index/'+name +'#paper');
+	page = requests.get('https://www.mtggoldfish.com/index/'+name +'#paper')
 	#page = open("scrape.html").read()
 	tree = html.fromstring(page.content);
 	cards = tree.xpath('//div[@class="index-price-table-paper"]/table/tbody/tr')
@@ -61,6 +61,14 @@ def getset(name):
 		cardlist[count] = cd
 		count +=1
 	return cardlist
+
+def average(cardlist):
+	count = 0
+	value = 0
+	while count < len(cardlist):
+		value += cardlist[count]
+		count+=1
+	return value/len(cardlist)
 #main();
 #start of program
 setName = raw_input("Please input the acronym for the set (I.E Khans of Tarkir is KTK): ")
@@ -72,19 +80,22 @@ commons = getRarity("Common", clist)
 uncommons = getRarity("Uncommon", clist)
 rares = getRarity("Rare", clist)
 mythics = getRarity("Mythic", clist)
-value = 0
+value = {}
 scount = 0
 pcount = 0
-rare_values = 0
+vcount = 0
+rare_values = {}
 pack_count = eval(raw_input("How many packs are in this box: "))
 while(scount < 10000):
 	while(pcount < pack_count):
 		pack = makePack(commons, uncommons, rares, mythics)
-		rare_values += pack[13]["value"]
-		value += getPackValue(pack)
+		rare_values[vcount] = pack[13]["value"]
+		value[vcount] = getPackValue(pack)
 		pcount += 1
+		vcount +=1
 	scount+=1
 	pcount=0
+print(value)
 print("Set Name:{}".format(setName))
-print("Total Average Box Value: {}".format(value/10000))
-print("Total Average Value of Rares in a Box: {}".format(rare_values/10000))
+print("Total Average Box Value: {}".format(average(value)))
+print("Total Average Value of Rares in a Box: {}".format(average(rare_values)))
