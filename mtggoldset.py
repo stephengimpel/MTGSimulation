@@ -93,11 +93,15 @@ def averageBox(numlist, totalBoxes, boxSize):
 		count += 1
 	return value/totalBoxes
 
-def merge_dicts(x, y, a, b):
+def merge_dicts(x, y, a, b, c, d, e, f):
     z = x.copy()
     z.update(y)
     z.update(a)
     z.update(b)
+    z.update(c)
+    z.update(d)
+    z.update(e)
+    z.update(f)
     return z
 
 def boxCreation(boxCount, packCount, pnum, start):
@@ -123,25 +127,36 @@ except:
 if(clist == {}):
 	print("An error occured. Set is empty. Check if your acronym is correct")
 	exit()
-number_of_boxes = 1000
+number_of_boxes = 10000
 commons = getRarity("Common", clist)
 uncommons = getRarity("Uncommon", clist)
 rares = getRarity("Rare", clist)
 mythics = getRarity("Mythic", clist)
 
 pack_count = eval(raw_input("How many packs do you want to open: "))
-pool = ThreadPool(processes=4)
+pool = ThreadPool(processes=8)
 print("Running simulation, this will take awhile")
-async_result1 = pool.apply_async(boxCreation, (number_of_boxes/4, pack_count, 1, 0))
-async_result2 = pool.apply_async(boxCreation, (number_of_boxes/4, pack_count, 2, number_of_boxes/4))
-async_result3 = pool.apply_async(boxCreation, (number_of_boxes/4, pack_count, 3, number_of_boxes/2))
-async_result4 = pool.apply_async(boxCreation, (number_of_boxes/4, pack_count, 4, (3*number_of_boxes)/4))
+async_result1 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 1, 0))
+async_result2 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 2, number_of_boxes/8))
+async_result3 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 3, number_of_boxes/4))
+async_result4 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 4, (3*number_of_boxes)/8))
+async_result5 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 5, number_of_boxes/2))
+async_result6 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 6, (5*number_of_boxes)/8))
+async_result7 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 7, (3*number_of_boxes)/4))
+async_result8 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 8, (7*number_of_boxes)/8))
 tvalue1, trare1 = async_result1.get()
 tvalue2, trare2 = async_result2.get()
 tvalue3, trare3 = async_result3.get()
 tvalue4, trare4 = async_result4.get()
-value = merge_dicts(tvalue1,tvalue2,tvalue3,tvalue4)
-rare_values = merge_dicts(trare1,trare2,trare3,trare4)
+tvalue5, trare5 = async_result5.get()
+tvalue6, trare6 = async_result6.get()
+tvalue7, trare7 = async_result7.get()
+tvalue8, trare8 = async_result8.get()
+pool.close()
+pool.join()
+value = merge_dicts(tvalue1,tvalue2,tvalue3,tvalue4,tvalue5,tvalue6,tvalue7,tvalue8)
+rare_values = merge_dicts(trare1,trare2,trare3,trare4,trare5,trare6,trare7,trare8)
+#async_result2 = pool.apply_async(average, rare_values)
 print("Set Name:{}".format(setName))
 print("Total Average Pack Value: {}".format(average(value)))
 print("Total Average Value of Rares/Mythics in a Pack: {}".format(average(rare_values)))
