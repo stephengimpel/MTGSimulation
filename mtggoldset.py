@@ -114,7 +114,7 @@ def boxCreation(boxCount, packCount, pnum, start):
 		rare_values[count] = pack[13]["value"]
 		value[count] = getPackValue(pack)
 		count+=1
-	return value, rare_values
+	return value, rare_values#, pmax, pmin, rmin
 
 #start of program
 start_time = time.time()
@@ -127,13 +127,27 @@ except:
 if(clist == {}):
 	print("An error occured. Set is empty. Check if your acronym is correct")
 	exit()
-number_of_boxes = 10000
+
 commons = getRarity("Common", clist)
 uncommons = getRarity("Uncommon", clist)
 rares = getRarity("Rare", clist)
 mythics = getRarity("Mythic", clist)
 
 pack_count = eval(raw_input("How many packs do you want to open: "))
+print("How accurate do you want your information?(This relies heavily on processor speed!)")
+print("1. Minimum (1,000 trials)")
+print("2. Adequate (10,000 trials")
+user = eval(raw_input("3. Thorough (100,000 trials)"))
+number_of_boxes = 0
+if(user == 1):
+	number_of_boxes = 1000
+elif(user == 2):
+	number_of_boxes = 10000
+elif(user == 3):
+	number_of_boxes = 100000
+else:
+	print("You did not select a proper input, using minimum.")
+	number_of_boxes = 1000
 pool = ThreadPool(processes=8)
 print("Running simulation, this will take awhile")
 async_result1 = pool.apply_async(boxCreation, (number_of_boxes/8, pack_count, 1, 0))
@@ -156,10 +170,12 @@ pool.close()
 pool.join()
 value = merge_dicts(tvalue1,tvalue2,tvalue3,tvalue4,tvalue5,tvalue6,tvalue7,tvalue8)
 rare_values = merge_dicts(trare1,trare2,trare3,trare4,trare5,trare6,trare7,trare8)
-#async_result2 = pool.apply_async(average, rare_values)
+#zasync_result2 = pool.apply_async(average, rare_values)
 print("Set Name:{}".format(setName))
 print("Total Average Pack Value: {}".format(average(value)))
 print("Total Average Value of Rares/Mythics in a Pack: {}".format(average(rare_values)))
 print("Total Average Box Value: {}".format(averageBox(value, number_of_boxes, pack_count)))
 print("Total Average Value of Rares/Mythics in a Box: {}".format(averageBox(rare_values, number_of_boxes, pack_count)))
+print("Most valuable card in the set(Max Price on Card): {}".format(clist.values()[0]))
+print("Least valuable card in the set(Min Price on Card): {}".format(clist.values()[len(clist)-1]))
 print("--- %s seconds ---" % (time.time() - start_time))
