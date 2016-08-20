@@ -8,6 +8,7 @@ from math import floor
 import math
 from multiprocessing.pool import ThreadPool
 import time
+import statistics
 #Below is a suggested solution for memory issues
 #def create_packs(n,lib):
  # while n:
@@ -76,15 +77,9 @@ def getset(name):
 		count +=1
 	return cardlist
 
-#function used to find average pack value
-def average(numlist):
-	return sum(numlist)/len(numlist)
-
+#function used to find average box value, not used at this time due to runtime inefficency
 def averageBox(numlist, totalBoxes):
 	return sum(numlist)/totalBoxes
-
-def standardDev(data, x_avg):
-	return math.sqrt((sum(map(lambda x:(x-x_avg)**2, data))/(len(data)-1)))
 
 def boxCreation(boxCount, packCount, pnum):
 	print("Process {}".format(pnum))
@@ -98,7 +93,7 @@ def boxCreation(boxCount, packCount, pnum):
 
 #start of program
 start_time = time.time()
-setName = raw_input("Please input the acronym for the set (I.E Khans of Tarkir is KTK): ")
+setName = input("Please input the acronym for the set (I.E Khans of Tarkir is KTK): ")
 try:
 	clist = getset(setName)
 except:
@@ -113,11 +108,11 @@ uncommons = getRarity("Uncommon", clist)
 rares = getRarity("Rare", clist)
 mythics = getRarity("Mythic", clist)
 
-pack_count = eval(raw_input("How many packs do you want to open: "))
+pack_count = eval(input("How many packs do you want to open: "))
 print("How accurate do you want your information?(This relies heavily on processor speed!)")
 print("1. Minimum (1,000 trials)")
 print("2. Adequate (10,000 trials")
-user = eval(raw_input("3. Thorough (100,000 trials)\n"))
+user = eval(input("3. Thorough (100,000 trials)\n"))
 number_of_boxes = 0
 if(user == 1):
 	number_of_boxes = 1000
@@ -151,8 +146,8 @@ pool.join()
 value = tvalue1+tvalue2+tvalue3+tvalue4+tvalue5+tvalue6+tvalue7+tvalue8
 rare_values = trare1+trare2+trare3+trare4+trare5+trare6+trare7+trare8
 #zasync_result2 = pool.apply_async(average, rare_values)
-avgrare = average(rare_values)
-avgv = average(value)
+avgrare = statistics.mean(rare_values)
+avgv = statistics.mean(value)
 avgb = averageBox(value, number_of_boxes)
 avgrb = averageBox(rare_values, number_of_boxes)
 print("Set Name:{}".format(setName))
@@ -160,8 +155,12 @@ print("Total Average Pack Value: {}".format(avgv))
 print("Total Average Value of Rares/Mythics in a Pack: {}".format(avgrare))
 print("Total Average Box Value: {}".format(avgb))
 print("Total Average Value of Rares/Mythics in a Box: {}".format(avgrb))
-print("Standard Deviation for packs: {}".format(standardDev(value, avgv)))
-print("Standard Deviation for Rares/Mythics in a pack: {}".format(standardDev(rare_values, avgrare)))
-print("Most valuable card in the set(Max Price on Card): {}".format(clist.values()[0]))
-print("Least valuable card in the set(Min Price on Card): {}".format(clist.values()[len(clist)-1]))
+print("Standard Deviation for packs: {}".format(statistics.stdev(value)))
+print("Standard Deviation for Rares/Mythics in a pack: {}".format(statistics.stdev(rare_values)))
+print("Median pack value: {}".format(statistics.median(value)))
+print("Median Rare/Mythics in a pack: {}".format(statistics.median(rare_values)))
+print("Variance of pack value: {}".format(statistics.variance(value)))
+print("Variance of Rare/Mythics in a pack: {}".format(statistics.variance(rare_values)))
+print("Most valuable card in the set(Max Price on Card): {}".format(list(clist.values())[0]))
+print("Least valuable card in the set(Min Price on Card): {}".format(list(clist.values())[len(clist)-1]))
 print("--- %s seconds ---" % (time.time() - start_time))
