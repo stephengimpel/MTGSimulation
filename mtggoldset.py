@@ -77,20 +77,16 @@ def getset(name):
 
 #function used to find average pack value
 def average(numlist):
-	count = 0
 	value = 0
 	for i in range(len(numlist)):
-		value += numlist[count]
-		count+=1
+		value += numlist[i]
 	return value/len(numlist)
 
 #function used to find average box value, not used at this time due to runtime inefficency
 def averageBox(numlist, totalBoxes, boxSize):
-	count = 0
 	value = 0
 	for i in range(totalBoxes * boxSize):
-		value += numlist[count]
-		count += 1
+		value += numlist[i]
 	return value/totalBoxes
 
 def merge_dicts(x, y, a, b, c, d, e, f):
@@ -103,6 +99,9 @@ def merge_dicts(x, y, a, b, c, d, e, f):
     z.update(e)
     z.update(f)
     return z
+def standardDev(clist):
+	x_avg = sum(clist)/len(clist)
+	return ((sum(map((lambda x:(x-x_avg)**2),clist))/(len(clist)-1))**.5)
 
 def boxCreation(boxCount, packCount, pnum, start):
 	print("Process {}".format(pnum))
@@ -176,6 +175,8 @@ print("Total Average Pack Value: {}".format(average(value)))
 print("Total Average Value of Rares/Mythics in a Pack: {}".format(average(rare_values)))
 print("Total Average Box Value: {}".format(averageBox(value, number_of_boxes, pack_count)))
 print("Total Average Value of Rares/Mythics in a Box: {}".format(averageBox(rare_values, number_of_boxes, pack_count)))
+print("Standard Deviation for packs: {}".format(standardDev(value)))
+print("Standard Deviation for Rares/Mythics in a pack: {}".format(standardDev(rare_values)))
 print("Most valuable card in the set(Max Price on Card): {}".format(clist.values()[0]))
 print("Least valuable card in the set(Min Price on Card): {}".format(clist.values()[len(clist)-1]))
 print("--- %s seconds ---" % (time.time() - start_time))
