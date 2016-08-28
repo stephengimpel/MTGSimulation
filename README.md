@@ -9,7 +9,7 @@ This is to help people who are on the fence about purchasing a given set or pack
 2. Install lxml http://lxml.de/installation.html for the respected python version
 3. run it.
 
-Program will simulate a certain number of packs being opened. Take mind of your own processors run time, as a slow processor with a large trial size could result in a core dump or system crash. All information was taken from MTGGoldFish.com if you desire individual pricing information please visit their website.
+Program will simulate a certain number of packs being opened. Take mind of your own processors run time, as a slow processor with a large trial size could result in a core dump or system crash.
 
 Features to come: HTML User interface, memory optimization, more statistical functionality for the python2 version.
 
