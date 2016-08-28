@@ -1,7 +1,7 @@
 # MTGSimulation
 Magic the Gathering pack opening simulation. Purpose of this project is to provide statistical information regarding Magic the Gathering sets with accurate pricing data from https://www.mtggoldfish.com/
 
-This simulation will not guaruntee any of the returns it predicts it simply finds basic statistical information regarding a given set. T
+This simulation will not guaruntee any of the monetary returns of magic the gathering packs it only finds basic statistical information regarding a given set.
 This is to help people who are on the fence about purchasing a given set or pack and want to see if it is worth the purchase.
 
 #RUNNING THIS SIMULATION
