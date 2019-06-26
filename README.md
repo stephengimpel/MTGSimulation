@@ -4,7 +4,7 @@ Magic the Gathering pack opening simulation. Purpose of this project is to provi
 This simulation will not guaruntee any of the monetary returns of magic the gathering packs it only finds basic statistical information regarding a given set.
 This is to help people who are on the fence about purchasing a given set or pack and want to see if it is worth the purchase.
 
-#RUNNING THIS SIMULATION
+# RUNNING THIS SIMULATION
 1. Install python 2 or 3 @ https://www.python.org/downloads/
 2. Install lxml http://lxml.de/installation.html for the respected python version
 3. run it.
