@@ -29,7 +29,7 @@ def getRarity(rare, cards):
 		if(cards[ci]["rarity"] == rare):
 			cardlist[count] = cards[ci]
 			count += 1
-	
+
 	return cardlist
 
 def makePack(commons, uncommons, rares, mythics):
@@ -155,6 +155,8 @@ print("Total Average Pack Value: {}".format(avgv))
 print("Total Average Value of Rares/Mythics in a Pack: {}".format(avgrare))
 print("Total Average Box Value: {}".format(avgb))
 print("Total Average Value of Rares/Mythics in a Box: {}".format(avgrb))
+print("Box Median: {}".format(statistics.median(value)));
+print("Rare Median: {}".format(statistics.median(rare_values)));
 print("Standard Deviation for packs: {}".format(statistics.stdev(value)))
 print("Standard Deviation for Rares/Mythics in a pack: {}".format(statistics.stdev(rare_values)))
 print("Median pack value: {}".format(statistics.median(value)))
