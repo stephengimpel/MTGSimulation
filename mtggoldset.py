@@ -8,18 +8,6 @@ from math import floor
 import math
 from multiprocessing.pool import ThreadPool
 import time
-#Below is a suggested solution for memory issues
-#def create_packs(n,lib):
- # while n:
-   # n-=1
-   # l = []
-  #  l.extend(random.choice(lib["common"]) for i in range(10))
-  #  l.extend(random.choice(lib["whatever"]) for i in range(3))
-  #  if(random.random() < 0.125):
-	#	pack[count] = mythics[floor(random.random() * len(mythics))]
-#	else:
-#	pack[count] = rares[floor(random.random() * len(rares))]
-#yield l
 
 def getRarity(rare, cards):
 	cardlist = {}
@@ -28,7 +16,7 @@ def getRarity(rare, cards):
 		if(cards[ci]["rarity"] == rare):
 			cardlist[count] = cards[ci]
 			count += 1
-	
+
 	return cardlist
 
 def makePack(commons, uncommons, rares, mythics):
@@ -55,8 +43,7 @@ def getPackValue(pack):
 
 def getset(name):
 	page = requests.get('https://www.mtggoldfish.com/index/'+ name +'#paper')
-	#page = open("scrape.html").read()
-	tree = html.fromstring(page.content);
+	tree = html.fromstring(page.content)
 	cards = tree.xpath('//div[@class="index-price-table-paper"]/div/table/tbody/tr')
 	cardlist = {}
 	count = 0
@@ -150,12 +137,12 @@ pool.close()
 pool.join()
 value = tvalue1+tvalue2+tvalue3+tvalue4+tvalue5+tvalue6+tvalue7+tvalue8
 rare_values = trare1+trare2+trare3+trare4+trare5+trare6+trare7+trare8
-#zasync_result2 = pool.apply_async(average, rare_values)
 avgrare = average(rare_values)
 avgv = average(value)
 avgb = averageBox(value, number_of_boxes)
 avgrb = averageBox(rare_values, number_of_boxes)
-setValues = list(clist.values());print("Set Name:{}".format(setName))
+setValues = list(clist.values())
+print("Set Name:{}".format(setName))
 print("Total Average Pack Value: {}".format(avgv))
 print("Total Average Value of Rares/Mythics in a Pack: {}".format(avgrare))
 print("Total Average Box Value: {}".format(avgb))
