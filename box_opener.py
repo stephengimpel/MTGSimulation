@@ -65,6 +65,7 @@ def open_box(card_set, total_packs):
     return box
 
 def thread_handler(number_of_boxes, total_packs, card_set):
+    print("child process running...")
     boxes = list()
     for i in range(int(number_of_boxes)):
         boxes.append(open_box(card_set, total_packs))
@@ -84,9 +85,9 @@ if(len(card_set) == 0):
 
 pack_count = eval(input("Number of packs being opened: "))
 
-number_of_boxes = 64000
-pool = ThreadPool(processes = 8)
+number_of_boxes = 16000
 print("Cracking open boxes")
+pool = ThreadPool(processes = 8)
 async_result1 = pool.apply_async(thread_handler, (number_of_boxes/8, pack_count, card_set))
 async_result2 = pool.apply_async(thread_handler, (number_of_boxes/8, pack_count, card_set))
 async_result3 = pool.apply_async(thread_handler, (number_of_boxes/8, pack_count, card_set))
@@ -104,10 +105,11 @@ boxes6 = async_result6.get()
 boxes7 = async_result7.get()
 boxes8 = async_result8.get()
 
+boxes = boxes1 + boxes2 + boxes3 + boxes4 + boxes5 + boxes6 + boxes7 + boxes8
 # Box statistics
-print("Average value of a box: {}".format(statistics.mean(box['total_value'] for box in boxes1)))
-print("Average value of rares/mythics in a box: {}".format(statistics.mean(box['rare_value'] for box in boxes1)))
-print("Median value of a box: {}".format(statistics.median(box['total_value'] for box in boxes1)))
-print("Median value of a rares/mythics in a box: {}".format(statistics.median(box['rare_value'] for box in boxes1)))
+print("Average value of a box: {}".format(statistics.mean(box['total_value'] for box in boxes)))
+print("Average value of rares/mythics in a box: {}".format(statistics.mean(box['rare_value'] for box in boxes)))
+print("Median value of a box: {}".format(statistics.median(box['total_value'] for box in boxes)))
+print("Median value of a rares/mythics in a box: {}".format(statistics.median(box['rare_value'] for box in boxes)))
 
 # Pack statistics

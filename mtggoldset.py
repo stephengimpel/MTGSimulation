@@ -54,10 +54,10 @@ def getPackValue(pack):
 	return num
 
 def getset(name):
-	page = requests.get('https://www.mtggoldfish.com/index/'+name +'#paper')
+	page = requests.get('https://www.mtggoldfish.com/index/'+ name +'#paper')
 	#page = open("scrape.html").read()
 	tree = html.fromstring(page.content);
-	cards = tree.xpath('//div[@class="index-price-table-paper"]/table/tbody/tr')
+	cards = tree.xpath('//div[@class="index-price-table-paper"]/div/table/tbody/tr')
 	cardlist = {}
 	count = 0
 	for i,ci in enumerate(cards):
@@ -98,7 +98,7 @@ def boxCreation(boxCount, packCount, pnum):
 
 #start of program
 start_time = time.time()
-setName = raw_input("Please input the acronym for the set (I.E Khans of Tarkir is KTK): ")
+setName = input("Please input the acronym for the set (I.E Khans of Tarkir is KTK): ")
 try:
 	clist = getset(setName)
 except:
@@ -113,11 +113,11 @@ uncommons = getRarity("Uncommon", clist)
 rares = getRarity("Rare", clist)
 mythics = getRarity("Mythic", clist)
 
-pack_count = eval(raw_input("How many packs do you want to open: "))
+pack_count = eval(input("How many packs do you want to open: "))
 print("How accurate do you want your information?(This relies heavily on processor speed!)")
 print("1. Minimum (1,000 trials)")
 print("2. Adequate (10,000 trials")
-user = eval(raw_input("3. Thorough (100,000 trials)\n"))
+user = eval(input("3. Thorough (100,000 trials)\n"))
 number_of_boxes = 0
 if(user == 1):
 	number_of_boxes = 1000
@@ -155,13 +155,13 @@ avgrare = average(rare_values)
 avgv = average(value)
 avgb = averageBox(value, number_of_boxes)
 avgrb = averageBox(rare_values, number_of_boxes)
-print("Set Name:{}".format(setName))
+setValues = list(clist.values());print("Set Name:{}".format(setName))
 print("Total Average Pack Value: {}".format(avgv))
 print("Total Average Value of Rares/Mythics in a Pack: {}".format(avgrare))
 print("Total Average Box Value: {}".format(avgb))
 print("Total Average Value of Rares/Mythics in a Box: {}".format(avgrb))
 print("Standard Deviation for packs: {}".format(standardDev(value, avgv)))
 print("Standard Deviation for Rares/Mythics in a pack: {}".format(standardDev(rare_values, avgrare)))
-print("Most valuable card in the set(Max Price on Card): {}".format(clist.values()[0]))
-print("Least valuable card in the set(Min Price on Card): {}".format(clist.values()[len(clist)-1]))
+print("Most valuable card in the set(Max Price on Card): {}".format(setValues[0]))
+print("Least valuable card in the set(Min Price on Card): {}".format(setValues[len(clist)-1]))
 print("--- %s seconds ---" % (time.time() - start_time))
