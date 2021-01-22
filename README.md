@@ -11,6 +11,4 @@ This is to help people who are on the fence about purchasing a given set or pack
 
 Program will simulate a certain number of packs being opened. Take mind of your own processors run time, as a slow processor with a large trial size could result in a core dump or system crash.
 
-Features to come: HTML User interface, memory optimization, more statistical functionality for the python2 version.
-
 Please visit https://www.mtggoldfish.com/ for more information regarding individual card prices, history of these prices, and purchasing cards.
